@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import TaskList from './TasksList';
+import TaskFormat from './taskInterface';
 
 const InboxTitle = styled.div`
   font-weight: bold;
@@ -30,28 +31,50 @@ const TriangleIcon = styled.div`
 
 TriangleIcon.displayName = 'TriangleIcon';
 
-const Inbox = (props) => {
-  const tasks = (
+interface Props {
+  tasks: TaskFormat[];
+  onDrop: Function,
+  onDragStart: Function,
+  onDragOver: Function,
+  handleTaskEdit: Function,
+  handleAddTask: Function,
+  handleFocus: Function
+}
+
+const Inbox = (props: Props) => {
+  const
+    {
+      tasks, onDrop, onDragStart, onDragOver, handleTaskEdit, handleAddTask, handleFocus,
+    } = props;
+  const [isInboxExpanded, setIsInboxExpanded] = useState(true);
+
+  const tasksList = (
     <TaskList
-      tasks={props.tasks}
+      tasks={tasks}
       projectId={0}
       sectionId={0}
-      onDragStart={props.onDragStart}
-      onDragOver={props.onDragOver}
-      handleTaskEdit={props.handleTaskEdit}
-      handleAddTask={props.handleAddTask}
+      onDragStart={onDragStart}
+      onDragOver={onDragOver}
+      handleTaskEdit={handleTaskEdit}
+      handleAddTask={handleAddTask}
+      handleFocus={handleFocus}
     />
   );
-  const triangle = props.isInboxExpanded ? '▾' : '▸';
+
+  const triangle = isInboxExpanded ? '▾' : '▸';
+
+  const handleInboxCollapsible = () => {
+    setIsInboxExpanded(!isInboxExpanded);
+  };
 
   return (
-    <InboxWrapper onDrop={(event) => props.onDrop(event, null, 0)}>
+    <InboxWrapper onDrop={(event) => onDrop(event, null, 0)}>
       <IconAndTitleWrapper>
-        <TriangleIcon onClick={() => props.handleProjectCollapsible(0)}>{triangle}</TriangleIcon>
+        <TriangleIcon onClick={() => handleInboxCollapsible()}>{triangle}</TriangleIcon>
         <InboxTitle>Inbox:</InboxTitle>
       </IconAndTitleWrapper>
       {
-        props.isInboxExpanded ? tasks : null
+        isInboxExpanded ? tasksList : null
       }
     </InboxWrapper>
   );

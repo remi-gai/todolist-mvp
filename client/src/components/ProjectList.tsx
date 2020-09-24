@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import SectionList from './SectionList';
-
+import dummyData from '../dummyData';
+import TaskFormat from './taskInterface';
 
 const ProjectContainer = styled.div`
   border-bottom: solid 1px #DCDCDC;
@@ -80,57 +81,120 @@ const AddProjectButton = styled.button`
 
 AddProjectButton.displayName = 'AddProjectButton';
 
-const ProjectList = (props) => (
-  <div>
-    <TitleAndButtonWrapper>
-      <ProjectsTitle>Projects:</ProjectsTitle>
-      <AddProjectButton onClick={() => props.handleAddProject()}>
-        + Add new Project
-      </AddProjectButton>
-    </TitleAndButtonWrapper>
-    {
-      props.projects.map((project, index) => {
-        const sections = (
-          <SectionList
-            tasks={props.tasks}
-            sections={props.sections}
-            projectId={project.projectId}
-            onDragStart={props.onDragStart}
-            onDragOver={props.onDragOver}
-            handleTaskEdit={props.handleTaskEdit}
-            handleAddTask={props.handleAddTask}
-            handleSectionCollapsible={props.handleSectionCollapsible}
-            handleSectionEdit={props.handleSectionEdit}
-            handleAddSection={props.handleAddSection}
-            onDrop={props.onDrop}
-            handleFocus={props.handleFocus}
-          />
-        );
+interface ProjectFormat {
+  projectId: number,
+  projectName: string,
+  isExpanded: boolean
+}
 
-        const triangle = project.isExpanded ? '▾' : '▸';
+interface Props {
+  tasks: TaskFormat[];
+  onDrop: Function,
+  onDragStart: Function,
+  onDragOver: Function,
+  handleTaskEdit: Function,
+  handleAddTask: Function,
+  handleFocus: Function
+}
 
-        return (
-          <ProjectContainer key={index}>
-            <IconAndTitleWrapper>
-              <TriangleIcon
-                onClick={() => props.handleProjectCollapsible(project.projectId)}
-              >
-                {triangle}
-              </TriangleIcon>
-              <ProjectName
-                style={{ fontWeight: 'bold' }} defaultValue={project.projectName}
-                onChange={(event) => props.handleProjectEdit(event, project.projectId)}
-                onDragOver={(event) => props.onDragOver(event)}
-                onDrop={(event) => props.onDrop(event, null, project.projectId, project.sectionId)}
-                onFocus={props.handleFocus}
-              />
-            </IconAndTitleWrapper>
-            {project.isExpanded ? sections : null}
-          </ProjectContainer>
-        );
-      })
+function ProjectList(props: Props) {
+  const {
+    tasks, onDragStart, onDragOver, onDrop, handleTaskEdit, handleAddTask, handleFocus,
+  } = props;
+
+  const [projects, setProjects] = useState([] as ProjectFormat[]);
+  const [projectId, setProjectId] = useState(0);
+
+  useEffect(() => {
+    const dummyProjects = dummyData.projects;
+    // componentDidMount
+    if (projects.length === 0) {
+      setProjects(dummyProjects);
+      setProjectId(dummyProjects.length + 1);
     }
-  </div>
-);
+  });
+
+  const handleProjects = {
+    handleAddProject() {
+      const currentProjects: ProjectFormat[] = projects.slice();
+      const currentProjectId: number = projectId;
+      const newProject: ProjectFormat = { projectId: currentProjectId, projectName: 'New Project', isExpanded: false };
+      currentProjects.push(newProject);
+      setProjects(currentProjects);
+      setProjectId(currentProjectId + 1);
+    },
+    handleProjectEdit(event: any, projectid: number) {
+      const { value } = event.target;
+      const currentProjects: ProjectFormat[] = projects.slice();
+      for (let i = 0; i < currentProjects.length; i += 1) {
+        const current: ProjectFormat = currentProjects[i];
+        if (current.projectId === projectid) {
+          current.projectName = value;
+        }
+      }
+      setProjects(currentProjects);
+    },
+    handleProjectCollapsible(projectid: number) {
+      const currentProjects: ProjectFormat[] = projects.slice();
+      for (let i = 0; i < currentProjects.length; i += 1) {
+        const current = currentProjects[i];
+        if (current.projectId === projectid) {
+          current.isExpanded = !current.isExpanded;
+        }
+      }
+      setProjects(currentProjects);
+    },
+  };
+
+  return (
+    <div>
+      <TitleAndButtonWrapper>
+        <ProjectsTitle>Projects:</ProjectsTitle>
+        <AddProjectButton onClick={() => handleProjects.handleAddProject()}>
+          + Add new Project
+        </AddProjectButton>
+      </TitleAndButtonWrapper>
+      {
+        projects.map((project) => {
+          const sections = (
+            <SectionList
+              tasks={tasks}
+              projectId={project.projectId}
+              onDragStart={onDragStart}
+              onDragOver={onDragOver}
+              handleTaskEdit={handleTaskEdit}
+              handleAddTask={handleAddTask}
+              onDrop={onDrop}
+              handleFocus={handleFocus}
+            />
+          );
+
+          const triangle = project.isExpanded ? '▾' : '▸';
+
+          return (
+            <ProjectContainer key={project.projectId}>
+              <IconAndTitleWrapper>
+                <TriangleIcon
+                  onClick={() => handleProjects.handleProjectCollapsible(project.projectId)}
+                >
+                  {triangle}
+                </TriangleIcon>
+                <ProjectName
+                  style={{ fontWeight: 'bold' }}
+                  defaultValue={project.projectName}
+                  onChange={(event) => handleProjects.handleProjectEdit(event, project.projectId)}
+                  onDragOver={(event) => onDragOver(event)}
+                  onDrop={(event) => onDrop(event, null, project.projectId)}
+                  onFocus={handleFocus}
+                />
+              </IconAndTitleWrapper>
+              {project.isExpanded ? sections : null}
+            </ProjectContainer>
+          );
+        })
+      }
+    </div>
+  );
+}
 
 export default ProjectList;

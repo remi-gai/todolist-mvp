@@ -27,19 +27,30 @@ const TaskWrapper = styled.div`
   }
 `;
 
-const handleFocus = (event) => event.target.select();
+interface Props {
+  taskName: string,
+  taskId: number,
+  onDragStart: Function,
+  handleTaskEdit: Function,
+  handleFocus: Function
+}
 
-const TaskEntry = (props) => (
-  <TaskWrapper
-    draggable
-    onDragStart={(event) => props.onDragStart(event, props.taskName, props.taskId)}
-  >
-    <TaskName
-      defaultValue={props.taskName}
-      onChange={(event) => props.handleTaskEdit(event, props.taskId)}
-      onFocus={handleFocus}
-    />
-  </TaskWrapper>
-);
+function TaskEntry(props: Props) {
+  const {
+    onDragStart, handleTaskEdit, taskName, taskId, handleFocus,
+  } = props;
+  return (
+    <TaskWrapper
+      draggable
+      onDragStart={(event) => onDragStart(event, taskName, taskId)}
+    >
+      <TaskName
+        defaultValue={taskName}
+        onChange={(event) => handleTaskEdit(event, taskId)}
+        onFocus={handleFocus}
+      />
+    </TaskWrapper>
+  );
+}
 
 export default TaskEntry;

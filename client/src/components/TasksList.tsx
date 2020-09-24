@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import TaskEntry from './TaskEntry';
+import TaskFormat from './taskInterface';
 
 const AddTaskButton = styled.button`
   background:  transparent;
@@ -20,29 +21,32 @@ const AddTaskButton = styled.button`
 
 AddTaskButton.displayName = 'AddTaskButton';
 
-const TasksList = (props) => (
-  <div>
-    {
-      props.tasks.map((task, index) => {
-        if (task.category === 'main' && task.projectId === props.projectId && task.sectionId === props.sectionId) {
-          return (
-            <TaskEntry
-              taskName={task.taskName}
-              key={index}
-              taskId={task.taskId}
-              onDragStart={props.onDragStart}
-              onDragOver={props.onDragOver}
-              handleTaskEdit={props.handleTaskEdit} />
-          );
-        }
-      })
-    }
-    <AddTaskButton
-      onClick={() => props.handleAddTask(props.projectId, props.sectionId)}
-    >
-      + Add new Task
-    </AddTaskButton>
-  </div>
-);
-
+function TasksList(props) {
+  const { tasks, onDragStart, handleTaskEdit, handleAddTask, handleFocus, projectId, sectionId } = props;
+  return (
+    <div>
+      {
+        tasks.map((task, index) => {
+          if (task.category === 'main' && task.projectId === projectId && task.sectionId === sectionId) {
+            return (
+              <TaskEntry
+                taskName={task.taskName}
+                key={index}
+                taskId={task.taskId}
+                onDragStart={onDragStart}
+                handleTaskEdit={handleTaskEdit}
+                handleFocus={handleFocus}
+              />
+            );
+          }
+        })
+      }
+      <AddTaskButton
+        onClick={() => handleAddTask(projectId, sectionId)}
+      >
+        + Add new Task
+      </AddTaskButton>
+    </div>
+  );
+}
 export default TasksList;
