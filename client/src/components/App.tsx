@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { createGlobalStyle } from 'styled-components';
+import styled, { createGlobalStyle } from 'styled-components';
 import dummyData from '../dummyData';
+import Calendar from './Calendar';
+import Inbox from './Inbox';
+import ProjectList from './ProjectList';
 
+// styled-components styling
 const GlobalStyle = createGlobalStyle`
   body {
     margin: 0;
@@ -12,6 +15,107 @@ const GlobalStyle = createGlobalStyle`
   }
 `;
 
+const OuterContainerWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  width: 984px;
+  height: 750px;
+  border: solid 1px black;
+  border-radius: 10px;
+`;
+
+OuterContainerWrapper.displayName = 'OuterContainerWrapper';
+
+const MenuWrapper = styled.div`
+  width: 50px;
+`;
+
+MenuWrapper.displayName = 'MenuWrapper';
+
+const Menu = styled.img.attrs({
+  src: './images/menu.png',
+})`
+  width: 50px;
+  height: 750px;
+`;
+
+Menu.displayName = 'Menu';
+
+const Schedule = styled.img.attrs({
+  src: './images/calendar.png',
+})`
+  width: 290px;
+`;
+
+Schedule.displayName = 'Schedule';
+
+const UpperBanner = styled.img.attrs({
+  src: './images/top-banner.png',
+})`
+  height: 175px;
+`;
+
+UpperBanner.displayName = 'UpperBanner';
+
+const ProjectIcon = styled.img.attrs({
+  src: './images/projectLogo.png',
+})`
+  position: absolute;
+  height: 18px;
+  margin-top: 131px;
+  margin-left: -33px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
+
+ProjectIcon.displayName = 'ProjectIcon';
+
+const MainPageWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+MainPageWrapper.displayName = 'MainPageWrapper';
+
+const UpperBannerWrapper = styled.div`
+  height: 175px;
+`;
+
+UpperBannerWrapper.displayName = 'UpperBannerWrapper';
+
+const LowerSectionWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  height: 575px;
+`;
+
+LowerSectionWrapper.displayName = 'LowerSectionWrapper';
+
+const TaskSectionWrapper = styled.div`
+  width: 640px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+`;
+
+TaskSectionWrapper.displayName = 'TaskSectionWrapper';
+
+const CalendarSectionWrapper = styled.div`
+  width: 300px;
+`;
+
+CalendarSectionWrapper.displayName = 'CalendarSectionWrapper';
+
+const TaskSectionPlaceholder = styled.img.attrs({
+  src: './images/task-page.png',
+})`
+  width: 650px;
+`;
+
+TaskSectionPlaceholder.displayName = 'TaskSectionPlaceholder';
+
+// interfaces
 interface TaskFormat {
   taskId: number,
   taskName: string,
@@ -35,8 +139,7 @@ interface SectionFormat {
 }
 
 function App() {
-
-  //hooks
+  // hooks
   const [tasks, setTasks] = useState([] as TaskFormat[]);
   const [projects, setProjects] = useState([] as ProjectFormat[]);
   const [sections, setSections] = useState([] as SectionFormat[]);
@@ -67,7 +170,7 @@ function App() {
       const currentTasks: TaskFormat[] = tasks.slice();
       const currentTaskId: number = taskId;
       const newTask: TaskFormat = {
-        taskId: currentTaskId, taskName: 'New Task', category: 'main', projectId: projectId, sectionId: sectionId, timeStamp: ''
+        taskId: currentTaskId, taskName: 'New Task', category: 'main', projectId, sectionId, timeStamp: '',
       };
 
       currentTasks.push(newTask);
@@ -122,13 +225,13 @@ function App() {
         setProjects(currentProjects);
       }
     }
-  }
+  };
 
   const handleSections = {
     handleAddSection(projectId: number) {
       const currentSections: SectionFormat[] = sections.slice();
       const currentSectionId: number = sectionId;
-      const newSection: SectionFormat = { sectionId: currentSectionId, sectionName: 'New Section', projectId: projectId, isExpanded: true }
+      const newSection: SectionFormat = { sectionId: currentSectionId, sectionName: 'New Section', projectId, isExpanded: true }
       currentSections.push(newSection);
       setSections(currentSections);
       setSectionId(currentSectionId + 1);
@@ -153,8 +256,8 @@ function App() {
         }
         setSections(currentSections);
       }
-    }
-  }
+    },
+  };
 
   const handleDragAndDrop = {
     onDragOver: (event: any) => {
@@ -180,7 +283,14 @@ function App() {
             break;
           }
         }
-        const newTask: TaskFormat = { taskId: Number(taskId), taskName: taskName, category: category, projectId: projectId, sectionId: sectionId, timeStamp: timeStamp };
+        const newTask: TaskFormat = {
+          taskId: Number(taskId),
+          taskName,
+          category,
+          projectId,
+          sectionId,
+          timeStamp,
+        };
         currentTasks.push(newTask);
         setTasks(currentTasks);
       } else {
@@ -194,22 +304,76 @@ function App() {
         }
         setTasks(currentTasks);
       }
-    }
-  }
+    },
+  };
 
   const handleChangePage = () => {
     setProjectsView(!projectsView);
-  }
+  };
 
   const handleFocus = (event: any) => {
     event.target.select();
-  }
+  };
 
   return (
-    <div>
-      <button onClick={() => handleProjects.handleAddProject()}>Add</button>
-    </div>
-  )
+    <OuterContainerWrapper>
+      <GlobalStyle />
+      <MenuWrapper>
+        <Menu />
+        <ProjectIcon onClick={() => handleChangePage()} />
+      </MenuWrapper>
+      <MainPageWrapper>
+        <UpperBannerWrapper>
+          <UpperBanner />
+        </UpperBannerWrapper>
+        <LowerSectionWrapper>
+          {projectsView
+            ? (
+              <TaskSectionWrapper onDragOver={handleDragAndDrop.onDragOver}>
+                <Inbox
+                  tasks={tasks}
+                  handleAddTask={handleTasks.handleAddTask}
+                  onDragStart={handleDragAndDrop.onDragStart}
+                  onDrop={handleDragAndDrop.onDrop}
+                  onDragOver={handleDragAndDrop.onDragOver}
+                  handleTaskEdit={handleTasks.handleTaskEdit}
+                  isInboxExpanded={isInboxExpanded}
+                  handleProjectCollapsible={handleProjects.handleProjectCollapsible}
+                />
+                <ProjectList
+                  projects={projects}
+                  tasks={tasks}
+                  sections={sections}
+                  isInboxExpanded={isInboxExpanded}
+                  handleAddTask={handleTasks.handleAddTask}
+                  onDragStart={handleDragAndDrop.onDragStart}
+                  onDrop={handleDragAndDrop.onDrop}
+                  onDragOver={handleDragAndDrop.onDragOver}
+                  handleTaskEdit={handleTasks.handleTaskEdit}
+                  handleProjectCollapsible={handleProjects.handleProjectCollapsible}
+                  handleProjectEdit={handleProjects.handleProjectEdit}
+                  handleAddProject={handleProjects.handleAddProject}
+                  handleSectionCollapsible={handleSections.handleSectionCollapsible}
+                  handleSectionEdit={handleSections.handleSectionEdit}
+                  handleAddSection={handleSections.handleAddSection}
+                  handleFocus={handleFocus}
+                />
+              </TaskSectionWrapper>
+            )
+            : (<TaskSectionPlaceholder />)}
+          <CalendarSectionWrapper>
+            <Schedule />
+            <Calendar
+              tasks={tasks}
+              onDrop={handleDragAndDrop.onDrop}
+              onDragOver={handleDragAndDrop.onDragOver}
+              onDragStart={handleDragAndDrop.onDragStart}
+            />
+          </CalendarSectionWrapper>
+        </LowerSectionWrapper>
+      </MainPageWrapper>
+    </OuterContainerWrapper>
+  );
 }
 
 export default App;
