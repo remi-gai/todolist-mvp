@@ -6,21 +6,21 @@
 ```
 Latest stable version of Node
 ```
-### Installalation
+### Installation
 
 ```
 npm install
 ```
 ###
-1) Generate the bundle file with Webpack:
+Generate the bundle file with Webpack:
 ```
 npm run build
 ```
-2) To run on electron:
+To run the app on electron:
 ```
 npm run electron
 ```
-or to run the app on a browser:
+TO run the app on a browser:
 ```
 npm start
 ```

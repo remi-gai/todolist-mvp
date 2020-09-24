@@ -244,7 +244,6 @@ function App() {
                   handleFocus={handleFocus}
                   onDragStart={handleDragAndDrop.onDragStart}
                   onDrop={handleDragAndDrop.onDrop}
-                  onDragOver={handleDragAndDrop.onDragOver}
                 />
                 <ProjectList
                   tasks={tasks}

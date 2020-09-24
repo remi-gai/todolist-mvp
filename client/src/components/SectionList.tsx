@@ -147,7 +147,6 @@ function SectionList(props: Props) {
           projectId={projectId}
           sectionId={0}
           onDragStart={onDragStart}
-          onDragOver={onDragOver}
           handleTaskEdit={handleTaskEdit}
           handleAddTask={handleAddTask}
           handleFocus={handleFocus}

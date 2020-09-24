@@ -35,7 +35,6 @@ interface Props {
   tasks: TaskFormat[];
   onDrop: Function,
   onDragStart: Function,
-  onDragOver: Function,
   handleTaskEdit: Function,
   handleAddTask: Function,
   handleFocus: Function
@@ -44,7 +43,7 @@ interface Props {
 const Inbox = (props: Props) => {
   const
     {
-      tasks, onDrop, onDragStart, onDragOver, handleTaskEdit, handleAddTask, handleFocus,
+      tasks, onDrop, onDragStart, handleTaskEdit, handleAddTask, handleFocus,
     } = props;
   const [isInboxExpanded, setIsInboxExpanded] = useState(true);
 
@@ -54,7 +53,6 @@ const Inbox = (props: Props) => {
       projectId={0}
       sectionId={0}
       onDragStart={onDragStart}
-      onDragOver={onDragOver}
       handleTaskEdit={handleTaskEdit}
       handleAddTask={handleAddTask}
       handleFocus={handleFocus}

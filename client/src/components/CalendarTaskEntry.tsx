@@ -28,7 +28,7 @@ function CalendarTaskEntry(props: Props) {
     >
       {taskName}
     </CalendarTaskWrapper>
-  )
-};
+  );
+}
 
 export default CalendarTaskEntry;

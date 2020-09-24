@@ -21,17 +21,29 @@ const AddTaskButton = styled.button`
 
 AddTaskButton.displayName = 'AddTaskButton';
 
-function TasksList(props) {
-  const { tasks, onDragStart, handleTaskEdit, handleAddTask, handleFocus, projectId, sectionId } = props;
+interface Props {
+  tasks: TaskFormat[];
+  projectId: number,
+  sectionId: number,
+  onDragStart: Function,
+  handleTaskEdit: Function,
+  handleAddTask: Function,
+  handleFocus: Function
+}
+
+function TasksList(props: Props) {
+  const {
+    tasks, onDragStart, handleTaskEdit, handleAddTask, handleFocus, projectId, sectionId,
+  } = props;
   return (
     <div>
       {
-        tasks.map((task, index) => {
+        tasks.map((task) => {
           if (task.category === 'main' && task.projectId === projectId && task.sectionId === sectionId) {
             return (
               <TaskEntry
                 taskName={task.taskName}
-                key={index}
+                key={task.taskId}
                 taskId={task.taskId}
                 onDragStart={onDragStart}
                 handleTaskEdit={handleTaskEdit}
@@ -39,6 +51,7 @@ function TasksList(props) {
               />
             );
           }
+          return null;
         })
       }
       <AddTaskButton
