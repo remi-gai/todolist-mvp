@@ -1,17 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
 
-const CalendarTaskWrapper = styled.div`
-  font-size: 12px;
-  color: white;
-  background-color: #587169;
-  padding: 1px;
-  border-radius: 4px;
-  border: solid 1px #282828;
-  &:hover {
-    cursor: pointer;
-  }
-`;
+import { CalendarTaskWrapper } from './styles';
 
 interface Props {
   taskName: string,

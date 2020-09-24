@@ -1,25 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
 import TaskEntry from './TaskEntry';
-import TaskFormat from './taskInterface';
+import TaskFormat from '../taskInterface';
 
-const AddTaskButton = styled.button`
-  background:  transparent;
-  border: white;
-  color: #A9A9A9;
-  height: 35px;
-  padding-left: 50px;
-  font-size: 13px;
-  &:hover {
-    color: #181818;
-    cursor: pointer;
-  }
-  &:focus{
-    outline: none;
-  }
-`;
-
-AddTaskButton.displayName = 'AddTaskButton';
+import { AddTaskButton } from './styles';
 
 interface Props {
   tasks: TaskFormat[];
@@ -54,6 +37,8 @@ function TasksList(props: Props) {
           return null;
         })
       }
+
+      {/* think about adding i18n */}
       <AddTaskButton
         onClick={() => handleAddTask(projectId, sectionId)}
       >

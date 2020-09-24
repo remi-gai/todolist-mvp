@@ -1,128 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import styled, { createGlobalStyle } from 'styled-components';
-import dummyData from '../dummyData';
-import Calendar from './Calendar';
-import Inbox from './Inbox';
-import ProjectList from './ProjectList';
+import React, { useState, useEffect, memo } from 'react';
 
-// styled-components styling
-const GlobalStyle = createGlobalStyle`
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: Open-Sans, Helvetica, Sans-Serif;
-    color: #585858;
-  }
-`;
+import dummyData from '../../dummyData';
+import Calendar from '../Calendar/Calendar';
+import Inbox from '../Inbox/Inbox';
+import ProjectList from '../Projects/ProjectList';
 
-const OuterContainerWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 984px;
-  height: 750px;
-  border: solid 1px black;
-  border-radius: 10px;
-`;
-
-OuterContainerWrapper.displayName = 'OuterContainerWrapper';
-
-const MenuWrapper = styled.div`
-  width: 50px;
-`;
-
-MenuWrapper.displayName = 'MenuWrapper';
-
-const Menu = styled.img.attrs({
-  src: './images/menu.png',
-})`
-  width: 50px;
-  height: 750px;
-`;
-
-Menu.displayName = 'Menu';
-
-const Schedule = styled.img.attrs({
-  src: './images/calendar.png',
-})`
-  width: 290px;
-`;
-
-Schedule.displayName = 'Schedule';
-
-const UpperBanner = styled.img.attrs({
-  src: './images/top-banner.png',
-})`
-  height: 175px;
-`;
-
-UpperBanner.displayName = 'UpperBanner';
-
-const ProjectIcon = styled.img.attrs({
-  src: './images/projectLogo.png',
-})`
-  position: absolute;
-  height: 18px;
-  margin-top: 131px;
-  margin-left: -33px;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-ProjectIcon.displayName = 'ProjectIcon';
-
-const MainPageWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-MainPageWrapper.displayName = 'MainPageWrapper';
-
-const UpperBannerWrapper = styled.div`
-  height: 175px;
-`;
-
-UpperBannerWrapper.displayName = 'UpperBannerWrapper';
-
-const LowerSectionWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  height: 575px;
-`;
-
-LowerSectionWrapper.displayName = 'LowerSectionWrapper';
-
-const TaskSectionWrapper = styled.div`
-  width: 640px;
-  overflow-y: scroll;
-  overflow-x: hidden;
-`;
-
-TaskSectionWrapper.displayName = 'TaskSectionWrapper';
-
-const CalendarSectionWrapper = styled.div`
-  width: 300px;
-`;
-
-CalendarSectionWrapper.displayName = 'CalendarSectionWrapper';
-
-const TaskSectionPlaceholder = styled.img.attrs({
-  src: './images/task-page.png',
-})`
-  width: 650px;
-`;
-
-TaskSectionPlaceholder.displayName = 'TaskSectionPlaceholder';
+import {
+  GlobalStyle, OuterContainerWrapper, MenuWrapper, Menu, Schedule, UpperBanner, ProjectIcon,
+  MainPageWrapper, UpperBannerWrapper, LowerSectionWrapper, TaskSectionWrapper,
+  CalendarSectionWrapper, TaskSectionPlaceholder,
+} from './styles';
 
 // interfaces
 interface TaskFormat {
   taskId: number,
+  // ids should be guuid
   taskName: string,
   category: string,
+  // category should be an enum
   projectId: number,
   sectionId: number,
   timeStamp: string
+  // timeStamp: Date
 }
 
 function App() {
@@ -134,11 +33,15 @@ function App() {
   // componentDidMount for tasks
   useEffect(() => {
     const dummyTasks = dummyData.tasks;
-    if (tasks.length === 0) {
-      setTasks(dummyTasks);
-      setTaskId(dummyTasks.length);
+
+    if (tasks.length !== 0) {
+      return;
     }
-  });
+
+    setTasks(dummyTasks);
+    setTaskId(dummyTasks.length);
+    // return () => {}
+  }, []);
 
   // methods
   const handleChangePage = () => {
@@ -149,14 +52,18 @@ function App() {
     event.target.select();
   };
 
+  // split out into interationUtils.ts
   const handleDragAndDrop = {
     onDragOver: (event: any) => {
       event.preventDefault();
     },
+    // pass an object
+    // onDragStart: ({ event: any, taskName: string, taskid: number}) => {
     onDragStart: (event: any, taskName: string, taskid: number) => {
       event.dataTransfer.setData('taskName', taskName);
       event.dataTransfer.setData('taskId', taskid);
     },
+    // consider using cb
     onDrop: (event: any, category: string, projectId: number = 0, sectionId: number = 0, timeStamp: string = '') => {
       const taskName = event.dataTransfer.getData('taskName');
       const taskid = event.dataTransfer.getData('taskId');
@@ -182,6 +89,7 @@ function App() {
           timeStamp,
         };
         currentTasks.push(newTask);
+        // db(currentTasks)
         setTasks(currentTasks);
       } else {
         // update the projectId and sectionId of the task
@@ -222,29 +130,35 @@ function App() {
     },
   };
 
+  const { onDragOver, onDragStart } = handleDragAndDrop;
+
   return (
     <OuterContainerWrapper>
       <GlobalStyle />
+
       <MenuWrapper>
         <Menu />
-        <ProjectIcon onClick={() => handleChangePage()} />
+        <ProjectIcon onClick={handleChangePage} />
       </MenuWrapper>
+
       <MainPageWrapper>
         <UpperBannerWrapper>
           <UpperBanner />
         </UpperBannerWrapper>
+
         <LowerSectionWrapper>
           {projectsView
             ? (
-              <TaskSectionWrapper onDragOver={handleDragAndDrop.onDragOver}>
+              <TaskSectionWrapper onDragOver={onDragOver}>
                 <Inbox
                   tasks={tasks}
                   handleAddTask={handleTasks.handleAddTask}
                   handleTaskEdit={handleTasks.handleTaskEdit}
                   handleFocus={handleFocus}
-                  onDragStart={handleDragAndDrop.onDragStart}
+                  onDragStart={onDragStart}
                   onDrop={handleDragAndDrop.onDrop}
                 />
+
                 <ProjectList
                   tasks={tasks}
                   handleAddTask={handleTasks.handleAddTask}
@@ -257,6 +171,7 @@ function App() {
               </TaskSectionWrapper>
             )
             : (<TaskSectionPlaceholder />)}
+
           <CalendarSectionWrapper>
             <Schedule />
             <Calendar
@@ -266,10 +181,12 @@ function App() {
               onDragStart={handleDragAndDrop.onDragStart}
             />
           </CalendarSectionWrapper>
+
         </LowerSectionWrapper>
       </MainPageWrapper>
     </OuterContainerWrapper>
   );
 }
 
-export default App;
+// memo: performance boost by memoizing
+export default memo(App);
