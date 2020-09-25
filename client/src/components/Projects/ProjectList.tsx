@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import SectionList from '../Sections/SectionList';
 import dummyData from '../../dummyData';
-import TaskFormat from '../taskInterface';
+import TaskFormat from '../Tasks/taskInterface';
 
 import
 {

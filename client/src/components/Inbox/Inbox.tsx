@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import TaskList from '../Tasks/TasksList';
-import TaskFormat from '../taskInterface';
+import TaskFormat from '../Tasks/taskInterface';
 
 import {
   InboxTitle, InboxWrapper, IconAndTitleWrapper, TriangleIcon,
