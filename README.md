@@ -1,5 +1,5 @@
 # Todolist MVP
-![](todolist.gif)
+![](todolist-demo.gif)
 
 ## 🚀 Getting Started
 
