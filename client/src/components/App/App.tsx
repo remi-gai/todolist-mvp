@@ -22,8 +22,8 @@ interface TaskFormat {
 }
 
 enum Category {
-  MAIN= 'MAIN',
-  CALENDAR= 'CALENDAR',
+  MAIN = 'MAIN',
+  CALENDAR = 'CALENDAR',
 }
 
 function App() {
@@ -90,13 +90,10 @@ function App() {
         setTasks(currentTasks);
       } else {
         // update the projectId and sectionId of the task
-        for (let i = 0; i < currentTasks.length; i += 1) {
-          const current = currentTasks[i];
-          if (current.taskId === Number(taskid)) {
-            current.projectId = projectId;
-            current.sectionId = sectionId;
-            break;
-          }
+        const targetTask = currentTasks.find((task) => task.taskId === Number(taskid));
+        if (targetTask) {
+          targetTask.projectId = projectId;
+          targetTask.sectionId = sectionId;
         }
         setTasks(currentTasks);
       }
@@ -118,17 +115,14 @@ function App() {
     handleTaskEdit: (event: any, taskid: number) => {
       const { value } = event.target;
       const currentTasks: TaskFormat[] = tasks.slice();
-      for (let i = 0; i < currentTasks.length; i += 1) {
-        const current: TaskFormat = currentTasks[i];
-        if (current.taskId === taskid) {
-          current.taskName = value;
-        }
-      }
+      const targetTask = currentTasks.find((task) => task.taskId === taskid);
+      if (targetTask) targetTask.taskName = value;
       setTasks(currentTasks);
     },
   };
 
-  const { onDragOver, onDragStart } = handleDragAndDrop;
+  const { onDragOver, onDragStart, onDrop } = handleDragAndDrop;
+  const { handleAddTask, handleTaskEdit } = handleTasks;
 
   return (
     <OuterContainerWrapper>
@@ -150,21 +144,21 @@ function App() {
               <TaskSectionWrapper onDragOver={onDragOver}>
                 <Inbox
                   tasks={tasks}
-                  handleAddTask={handleTasks.handleAddTask}
-                  handleTaskEdit={handleTasks.handleTaskEdit}
+                  handleAddTask={handleAddTask}
+                  handleTaskEdit={handleTaskEdit}
                   handleFocus={handleFocus}
                   onDragStart={onDragStart}
-                  onDrop={handleDragAndDrop.onDrop}
+                  onDrop={onDrop}
                 />
 
                 <ProjectList
                   tasks={tasks}
-                  handleAddTask={handleTasks.handleAddTask}
-                  handleTaskEdit={handleTasks.handleTaskEdit}
+                  handleAddTask={handleAddTask}
+                  handleTaskEdit={handleTaskEdit}
                   handleFocus={handleFocus}
-                  onDragStart={handleDragAndDrop.onDragStart}
-                  onDrop={handleDragAndDrop.onDrop}
-                  onDragOver={handleDragAndDrop.onDragOver}
+                  onDragStart={onDragStart}
+                  onDrop={onDrop}
+                  onDragOver={onDragOver}
                 />
               </TaskSectionWrapper>
             )
@@ -174,9 +168,9 @@ function App() {
             <Schedule />
             <Calendar
               tasks={tasks}
-              onDrop={handleDragAndDrop.onDrop}
-              onDragOver={handleDragAndDrop.onDragOver}
-              onDragStart={handleDragAndDrop.onDragStart}
+              onDrop={onDrop}
+              onDragOver={onDragOver}
+              onDragStart={onDragStart}
             />
           </CalendarSectionWrapper>
 

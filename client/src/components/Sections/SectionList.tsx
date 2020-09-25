@@ -56,23 +56,15 @@ function SectionList({
     handleSectionEdit(event: any, sectionid: number) {
       const { value } = event.target;
       const currentSections = sections.slice();
-      for (let i = 0; i < currentSections.length; i += 1) {
-        const current = currentSections[i];
-        if (current.sectionId === sectionid) {
-          current.sectionName = value;
-        }
-      }
+      const targetSection = currentSections.find((section) => section.sectionId === sectionid);
+      if (targetSection) targetSection.sectionName = value;
       setSections(currentSections);
     },
     handleSectionCollapsible(sectionid: number) {
       const currentSections = sections.slice();
-      for (let i = 0; i < currentSections.length; i += 1) {
-        const current = currentSections[i];
-        if (current.sectionId === sectionid) {
-          current.isExpanded = !current.isExpanded;
-        }
-        setSections(currentSections);
-      }
+      const targetSection = currentSections.find((section) => section.sectionId === sectionid);
+      if (targetSection) targetSection.isExpanded = !targetSection.isExpanded;
+      setSections(currentSections);
     },
   };
 

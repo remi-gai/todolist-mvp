@@ -4,8 +4,7 @@ import SectionList from '../Sections/SectionList';
 import dummyData from '../../dummyData';
 import TaskFormat from '../Tasks/taskInterface';
 
-import
-{
+import {
   ProjectContainer, TitleAndButtonWrapper,
   ProjectsTitle, IconAndTitleWrapper, TriangleIcon,
   ProjectName, AddProjectButton,
@@ -54,31 +53,25 @@ function ProjectList({
     handleProjectEdit(event: any, projectid: number) {
       const { value } = event.target;
       const currentProjects: ProjectFormat[] = projects.slice();
-      for (let i = 0; i < currentProjects.length; i += 1) {
-        const current: ProjectFormat = currentProjects[i];
-        if (current.projectId === projectid) {
-          current.projectName = value;
-        }
-      }
+      const targetProject = currentProjects.find((project) => project.projectId === projectid);
+      if (targetProject) targetProject.projectName = value;
       setProjects(currentProjects);
     },
     handleProjectCollapsible(projectid: number) {
       const currentProjects: ProjectFormat[] = projects.slice();
-      for (let i = 0; i < currentProjects.length; i += 1) {
-        const current = currentProjects[i];
-        if (current.projectId === projectid) {
-          current.isExpanded = !current.isExpanded;
-        }
-      }
+      const targetProject = currentProjects.find((project) => project.projectId === projectid);
+      if (targetProject) targetProject.isExpanded = !targetProject.isExpanded;
       setProjects(currentProjects);
     },
   };
+
+  const { handleAddProject, handleProjectEdit, handleProjectCollapsible } = handleProjects;
 
   return (
     <div>
       <TitleAndButtonWrapper>
         <ProjectsTitle>Projects:</ProjectsTitle>
-        <AddProjectButton onClick={handleProjects.handleAddProject}>
+        <AddProjectButton onClick={handleAddProject}>
           + Add new Project
         </AddProjectButton>
       </TitleAndButtonWrapper>
@@ -103,14 +96,14 @@ function ProjectList({
             <ProjectContainer key={project.projectId}>
               <IconAndTitleWrapper>
                 <TriangleIcon
-                  onClick={() => handleProjects.handleProjectCollapsible(project.projectId)}
+                  onClick={() => handleProjectCollapsible(project.projectId)}
                 >
                   {triangle}
                 </TriangleIcon>
                 <ProjectName
                   style={{ fontWeight: 'bold' }}
                   defaultValue={project.projectName}
-                  onChange={(event) => handleProjects.handleProjectEdit(event, project.projectId)}
+                  onChange={(event) => handleProjectEdit(event, project.projectId)}
                   onDragOver={(event) => onDragOver(event)}
                   onDrop={(event) => onDrop(event, null, project.projectId)}
                   onFocus={handleFocus}
