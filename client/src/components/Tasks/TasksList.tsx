@@ -37,7 +37,6 @@ function TasksList({
         })
       }
 
-      {/* think about adding i18n */}
       <AddTaskButton
         onClick={() => handleAddTask(projectId, sectionId)}
       >
