@@ -1,6 +1,6 @@
 import React from 'react';
 import TaskEntry from './TaskEntry';
-import TaskFormat from '../taskInterface';
+import TaskFormat from './taskInterface';
 
 import { AddTaskButton } from './styles';
 
