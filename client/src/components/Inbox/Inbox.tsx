@@ -42,7 +42,7 @@ const Inbox = ({
   return (
     <InboxWrapper onDrop={(event) => onDrop(event, null, 0)}>
       <IconAndTitleWrapper>
-        <TriangleIcon onClick={() => handleInboxCollapsible()}>{triangle}</TriangleIcon>
+        <TriangleIcon onClick={handleInboxCollapsible}>{triangle}</TriangleIcon>
         <InboxTitle>Inbox:</InboxTitle>
       </IconAndTitleWrapper>
       {

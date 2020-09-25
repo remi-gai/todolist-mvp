@@ -26,7 +26,7 @@ function Calendar({
           <TimeslotWrapper
             key={time}
             onDragOver={(event) => onDragOver(event)}
-            onDrop={(event) => onDrop(event, 'CALENDAR', null, null, timeSlots[index])}
+            onDrop={(event) => onDrop(event, 'CALENDAR', null, null, time)}
           >
             <TimeStamp>{time}</TimeStamp>
             <TimeBox>

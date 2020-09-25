@@ -78,7 +78,7 @@ function ProjectList({
     <div>
       <TitleAndButtonWrapper>
         <ProjectsTitle>Projects:</ProjectsTitle>
-        <AddProjectButton onClick={() => handleProjects.handleAddProject()}>
+        <AddProjectButton onClick={handleProjects.handleAddProject}>
           + Add new Project
         </AddProjectButton>
       </TitleAndButtonWrapper>
