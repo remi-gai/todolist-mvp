@@ -40,7 +40,6 @@ function App() {
 
     setTasks(dummyTasks);
     setTaskId(dummyTasks.length);
-    // return () => {}
   }, []);
 
   // methods

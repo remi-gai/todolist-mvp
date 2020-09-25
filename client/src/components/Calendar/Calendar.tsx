@@ -1,7 +1,7 @@
 import React from 'react';
 
 import CalendarTaskEntry from './CalendarTaskEntry';
-import TaskFormat from '../taskInterface';
+import TaskFormat from '../Tasks/taskInterface';
 
 import {
   CalendarWrapper, TimeslotWrapper, TimeStamp, TimeBox,
