@@ -14,15 +14,14 @@ interface Props {
   handleFocus: Function
 }
 
-function TasksList(props: Props) {
-  const {
-    tasks, onDragStart, handleTaskEdit, handleAddTask, handleFocus, projectId, sectionId,
-  } = props;
+function TasksList({
+  tasks, onDragStart, handleTaskEdit, handleAddTask, handleFocus, projectId, sectionId,
+}: Props) {
   return (
     <div>
       {
         tasks.map((task) => {
-          if (task.category === 'main' && task.projectId === projectId && task.sectionId === sectionId) {
+          if (task.category === 'MAIN' && task.projectId === projectId && task.sectionId === sectionId) {
             return (
               <TaskEntry
                 taskName={task.taskName}

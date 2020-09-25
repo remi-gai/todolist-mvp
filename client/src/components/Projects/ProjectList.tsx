@@ -27,13 +27,11 @@ interface Props {
   handleFocus: Function
 }
 
-function ProjectList(props: Props) {
-  const {
-    tasks, onDragStart, onDragOver, onDrop, handleTaskEdit, handleAddTask, handleFocus,
-  } = props;
-
+function ProjectList({
+  tasks, onDragStart, onDragOver, onDrop, handleTaskEdit, handleAddTask, handleFocus,
+}: Props) {
   const [projects, setProjects] = useState([] as ProjectFormat[]);
-  const [projectId, setProjectId] = useState(0);
+  const [projectId, setProjectId] = useState<number>(0);
 
   useEffect(() => {
     const dummyProjects = dummyData.projects;

@@ -30,5 +30,8 @@ TriangleIcon.displayName = 'TriangleIcon';
 
 export
 {
-  InboxTitle, InboxWrapper, IconAndTitleWrapper, TriangleIcon,
+  InboxTitle,
+  InboxWrapper,
+  IconAndTitleWrapper,
+  TriangleIcon,
 };

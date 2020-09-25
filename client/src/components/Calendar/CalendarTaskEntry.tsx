@@ -8,8 +8,7 @@ interface Props {
   onDragStart: Function,
 }
 
-function CalendarTaskEntry(props: Props) {
-  const { onDragStart, taskName, taskId } = props;
+function CalendarTaskEntry({ onDragStart, taskName, taskId }: Props) {
   return (
     <CalendarTaskWrapper
       draggable

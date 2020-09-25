@@ -54,5 +54,9 @@ const CalendarTaskWrapper = styled.div`
 CalendarTaskWrapper.displayName = 'CalendarTaskWrapper';
 
 export {
-  CalendarWrapper, TimeslotWrapper, TimeStamp, TimeBox, CalendarTaskWrapper,
+  CalendarWrapper,
+  TimeslotWrapper,
+  TimeStamp,
+  TimeBox,
+  CalendarTaskWrapper,
 };

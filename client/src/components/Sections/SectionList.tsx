@@ -27,13 +27,11 @@ interface Props {
   projectId: number,
 }
 
-function SectionList(props: Props) {
-  const {
-    tasks, onDragStart, onDragOver, onDrop, handleTaskEdit, handleAddTask, handleFocus, projectId,
-  } = props;
-
+function SectionList({
+  tasks, onDragStart, onDragOver, onDrop, handleTaskEdit, handleAddTask, handleFocus, projectId,
+}: Props) {
   const [sections, setSections] = useState([] as SectionFormat[]);
-  const [sectionId, setSectionId] = useState(0);
+  const [sectionId, setSectionId] = useState<number>(0);
 
   useEffect(() => {
     const dummySections = dummyData.sections;

@@ -1,10 +1,15 @@
 interface TaskFormat {
   taskId: number,
   taskName: string,
-  category: string,
+  category: Category,
   projectId: number,
   sectionId: number,
-  timeStamp: string
+  hourName: string
+}
+
+enum Category {
+  MAIN= 'MAIN',
+  CALENDAR= 'CALENDAR',
 }
 
 export default TaskFormat;

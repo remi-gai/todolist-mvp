@@ -16,11 +16,9 @@ interface Props {
   handleFocus: Function
 }
 
-const Inbox = (props: Props) => {
-  const
-    {
-      tasks, onDrop, onDragStart, handleTaskEdit, handleAddTask, handleFocus,
-    } = props;
+const Inbox = ({
+  tasks, onDrop, onDragStart, handleTaskEdit, handleAddTask, handleFocus,
+}: Props) => {
   const [isInboxExpanded, setIsInboxExpanded] = useState(true);
 
   const tasksList = (

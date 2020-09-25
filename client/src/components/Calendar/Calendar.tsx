@@ -16,11 +16,9 @@ interface Props {
   onDragOver: Function,
 }
 
-function Calendar(props: Props) {
-  const {
-    tasks, onDrop, onDragOver, onDragStart,
-  } = props;
-
+function Calendar({
+  tasks, onDrop, onDragOver, onDragStart,
+}: Props) {
   return (
     <CalendarWrapper>
       {
@@ -28,13 +26,13 @@ function Calendar(props: Props) {
           <TimeslotWrapper
             key={time}
             onDragOver={(event) => onDragOver(event)}
-            onDrop={(event) => onDrop(event, 'calendar', null, null, timeSlots[index])}
+            onDrop={(event) => onDrop(event, 'CALENDAR', null, null, timeSlots[index])}
           >
             <TimeStamp>{time}</TimeStamp>
             <TimeBox>
               {
                 tasks.map((task) => {
-                  if (task.category === 'calendar' && task.timeStamp === time) {
+                  if (task.category === 'CALENDAR' && task.hourName === time) {
                     return (
                       <CalendarTaskEntry
                         taskName={task.taskName}

@@ -10,10 +10,9 @@ interface Props {
   handleFocus: Function
 }
 
-function TaskEntry(props: Props) {
-  const {
-    onDragStart, handleTaskEdit, taskName, taskId, handleFocus,
-  } = props;
+function TaskEntry({
+  onDragStart, handleTaskEdit, taskName, taskId, handleFocus,
+}: Props) {
   return (
     <TaskWrapper
       draggable

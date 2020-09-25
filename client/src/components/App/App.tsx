@@ -14,21 +14,23 @@ import {
 // interfaces
 interface TaskFormat {
   taskId: number,
-  // ids should be guuid
   taskName: string,
-  category: string,
-  // category should be an enum
+  category: Category,
   projectId: number,
   sectionId: number,
-  timeStamp: string
-  // timeStamp: Date
+  hourName: string
+}
+
+enum Category {
+  MAIN= 'MAIN',
+  CALENDAR= 'CALENDAR',
 }
 
 function App() {
   // hooks
   const [tasks, setTasks] = useState([] as TaskFormat[]);
-  const [taskId, setTaskId] = useState(0);
-  const [projectsView, setProjectsView] = useState(true);
+  const [taskId, setTaskId] = useState<number>(0);
+  const [projectsView, setProjectsView] = useState<Boolean>(true);
 
   // componentDidMount for tasks
   useEffect(() => {
@@ -47,33 +49,29 @@ function App() {
     setProjectsView(!projectsView);
   };
 
-  const handleFocus = (event: any) => {
+  const handleFocus = (event: React.FocusEvent<any>) => {
     event.target.select();
   };
 
-  // split out into interationUtils.ts
   const handleDragAndDrop = {
-    onDragOver: (event: any) => {
+    onDragOver: (event: React.DragEvent<any>) => {
       event.preventDefault();
     },
-    // pass an object
-    // onDragStart: ({ event: any, taskName: string, taskid: number}) => {
-    onDragStart: (event: any, taskName: string, taskid: number) => {
+    onDragStart: (event: React.DragEvent<any>, taskName: string, taskid: string) => {
       event.dataTransfer.setData('taskName', taskName);
       event.dataTransfer.setData('taskId', taskid);
     },
-    // consider using cb
-    onDrop: (event: any, category: string, projectId: number = 0, sectionId: number = 0, timeStamp: string = '') => {
+    onDrop: (event: React.DragEvent<any>, category: Category, projectId: number = 0, sectionId: number = 0, hourName: string = '') => {
       const taskName = event.dataTransfer.getData('taskName');
       const taskid = event.dataTransfer.getData('taskId');
       const currentTasks = tasks.slice();
 
       // path for adding to calendar
-      if (category === 'calendar') {
+      if (category === Category.CALENDAR) {
         // check that the task isn't already in calendar
         for (let i = 0; i < currentTasks.length; i += 1) {
           const current = currentTasks[i];
-          if (current.taskId === Number(taskid) && current.category === 'calendar') {
+          if (current.taskId === Number(taskid) && current.category === Category.CALENDAR) {
             // if so, remove from the list of tasks
             currentTasks.splice(i, 1);
             break;
@@ -85,10 +83,10 @@ function App() {
           category,
           projectId,
           sectionId,
-          timeStamp,
+          hourName,
         };
+
         currentTasks.push(newTask);
-        // db(currentTasks)
         setTasks(currentTasks);
       } else {
         // update the projectId and sectionId of the task
@@ -97,6 +95,7 @@ function App() {
           if (current.taskId === Number(taskid)) {
             current.projectId = projectId;
             current.sectionId = sectionId;
+            break;
           }
         }
         setTasks(currentTasks);
@@ -109,7 +108,7 @@ function App() {
       const currentTasks: TaskFormat[] = tasks.slice();
       const currentTaskId: number = taskId;
       const newTask: TaskFormat = {
-        taskId: currentTaskId, taskName: 'New Task', category: 'main', projectId, sectionId, timeStamp: '',
+        taskId: currentTaskId, taskName: 'New Task', category: Category.MAIN, projectId, sectionId, hourName: '',
       };
 
       currentTasks.push(newTask);
